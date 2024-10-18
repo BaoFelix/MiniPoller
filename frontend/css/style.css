@@ -1,0 +1,18 @@
+/* Sets the default font family for the entire document to Arial, with sans-serif as a fallback */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Styles the main container with a maximum width, centered alignment, and padding */
+  #app {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  /* Utility class to hide elements */
+  .hidden {
+    display: none;
+  }
