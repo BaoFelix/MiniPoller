@@ -2,6 +2,7 @@
   "name": "backend",
   "version": "1.0.0",
   "main": "server.js",
+  "bin": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
@@ -14,5 +15,13 @@
     "express": "^4.21.1",
     "socket.io": "^4.8.0",
     "uuid": "^10.0.0"
+  },
+  "pkg": {
+    "assets": [
+      "../frontend/**/*"
+    ],
+    "scripts": [
+      "server.js"
+    ]
   }
 }
