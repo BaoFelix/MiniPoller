@@ -5,7 +5,6 @@ class UIComponents {
     this.apiService = apiService;
     this.socketManager = socketManager;
     this.pollCreationForm = new PollCreationForm(apiService);
-    this.ownerInterface = new OwnerInterface(apiService, socketManager);
     this.votingInterface = new VotingInterface(apiService, socketManager);
     this.appElement = document.getElementById("app");
   }
@@ -15,19 +14,16 @@ class UIComponents {
     this.pollCreationForm.render(this.appElement);
   }
 
-  showOwnerInterface() {
-    this.clearAppElement();
-    this.ownerInterface.render(this.appElement);
-  }
-
   showVotingInterface() {
     this.clearAppElement();
     this.votingInterface.render(this.appElement);
   }
 
   handlePollEnded() {
-    this.votingInterface.disableVoting();
-    this.votingInterface.resultsDisplay.showFinalResults();
+    this.votingInterface.removeVotingElements();
+    this.votingInterface.centerPollTitle();
+    this.votingInterface.displayPollEndedMessage();
+    this.votingInterface.animateChartDisplay();
   }
 
   clearAppElement() {

@@ -4,9 +4,11 @@
   <!-- Specifies the character encoding for the HTML document -->
   <meta charset="UTF-8">
   <!-- Sets the title of the web page -->
-  <title>Mini Voting App</title>
-  <!-- Links to an external CSS file for styling the web page -->
-  <link rel="stylesheet" href="css/styles.css">
+  <title>Mini Poller</title>
+  <link rel="preconnect" href="https://fonts.gstatic.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="/css/styles.css?v=6">
 </head>
 <body>
   <!-- Main container where dynamic content will be injected -->
@@ -17,9 +19,7 @@
   <!-- Libraries -->
   <!-- Loads the Socket.IO library for real-time communication -->
   <script src="https://cdn.socket.io/4.4.1/socket.io.min.js"></script>
-  <!-- Loads the Chart.js library for rendering charts -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+  
   <!-- JavaScript Files -->
   <!-- Loads the API service script for handling API requests -->
   <script src="/js/apiService.js"></script>
@@ -27,12 +27,8 @@
   <script src="/js/socketManager.js"></script>
   <!-- Loads the Poll Creation Form script for poll creation functionality -->
   <script src="/js/pollCreationForm.js"></script>
-  <!-- Loads the Owner Interface script for poll creation functionality -->
-  <script src="/js/ownerInterface.js"></script>
   <!-- Loads the Voting Interface script for the voting interface -->
   <script src="/js/votingInterface.js"></script>
-  <!-- Loads the Results Display script for displaying voting results -->
-  <script src="/js/resultsDisplay.js"></script>
   <!-- Loads the UI Components script for reusable UI components -->
   <script src="/js/uiComponents.js"></script>
   <!-- Loads the main application script -->

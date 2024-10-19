@@ -58,6 +58,7 @@ class ClientApp {
     const urlParams = new URLSearchParams(window.location.search);
     const ownerToken = urlParams.get('ownerToken');
 
+    const appContainer = document.getElementById('app');
 
     // Show the appropriate UI components based on the presence of a poll ID
     if (pollId === null) 
@@ -66,32 +67,27 @@ class ClientApp {
     } 
     else 
     {
+      // Poll ID exists, proceed to voting interface
       this.pollId = pollId;
       this.ownerToken = ownerToken;
 
+      // Connect to the socket with the poll ID
       this.socketManager.connect(pollId);
 
-      if(this.ownerToken){
-        this.uiComponents.showOwnerInterface();
-        this.uiComponents.ownerInterface.renderPoll(this.pollId, this.ownerToken);
+      // Render the voting interface
+      this.uiComponents.votingInterface.render(appContainer);
+      // Pass the ownerToken if available
+      this.uiComponents.votingInterface.renderPoll(this.pollId, this.ownerToken);
 
-        this.socketManager.on("voteUpdate", (results) => {
-          this.uiComponents.ownerInterface.resultsDisplay.update(results);
-        });
-      }
-      else{
-        this.uiComponents.showVotingInterface();
-        this.uiComponents.votingInterface.renderPoll(pollId);
+      // Listen for vote updates
+      this.socketManager.on("voteUpdate", (results) => {
+        this.uiComponents.votingInterface.updateChartData(results);
+      });
 
-        this.socketManager.on("voteUpdate", (results) => {
-          this.uiComponents.votingInterface.resultsDisplay.update(results);
-        });
-      }
-
-      this.socketManager.on(
-        "pollEnded",
-        this.uiComponents.handlePollEnded.bind(this.uiComponents)
-      );
+      // Listen for poll ended event
+      this.socketManager.on("pollEnded", () => {
+        this.uiComponents.handlePollEnded();
+      });
     }
   }
 

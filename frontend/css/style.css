@@ -1,18 +1,195 @@
-/* Sets the default font family for the entire document to Arial, with sans-serif as a fallback */
+/* styles.css */
+
+/* 全局变量 */
+:root {
+  --primary-color: #4f5d75;
+  --secondary-color: #ef8354;
+  --accent-color: #2d3142;
+  --background-color: #ffffff;
+  --text-color: #000000;
+}
+
+/* 重置样式，消除浏览器默认的样式干扰 */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+/* 全局样式 */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-  }
-  
-  /* Styles the main container with a maximum width, centered alignment, and padding */
-  #app {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-  }
-  
-  /* Utility class to hide elements */
-  .hidden {
-    display: none;
-  }
+  font-family: 'Inter', sans-serif;
+  background-color: #f8f9fa;
+  color: var(--text-color);
+}
+
+/* 容器样式 */
+.container, #app {
+  max-width: 600px;
+  margin: 50px auto;
+  background-color: #fff;
+  padding: 20px 30px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 标题样式 */
+h1 {
+  font-weight: 600;
+  color: #343a40;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+/* 表单样式 */
+form {
+  width: 100%;
+}
+
+/* 表单组样式 */
+.form-group {
+  margin-bottom: 25px;
+}
+
+/* 标签样式 */
+.form-group label {
+  display: block; /* 确保标签占据整行 */
+  font-weight: 600;
+  margin-bottom: 10px;
+  color: #495057;
+}
+
+/* 输入框和文本区域的通用样式 */
+.form-group input[type="text"],
+.form-group textarea {
+  display: block; /* 确保输入框和文本区域占据整行 */
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+  color: #495057;
+  background-color: #fff;
+  outline: none;
+}
+
+/* 文本区域特定样式 */
+.form-group textarea {
+  height: 100px; /* 根据需要调整高度 */
+  resize: vertical;
+}
+
+/* 针对“Poll Question”的 textarea 样式 */
+#question-container .question-input textarea {
+  width: 100%; /* 确保宽度为100% */
+  height: 200px; /* 增加高度 */
+  padding: 12px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  font-size: 16px;
+  resize: vertical; /* 允许用户调整高度 */
+  color: #495057;
+  background-color: #fff;
+  outline: none;
+}
+
+/* 选项输入容器 */
+.option-input {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 15px;
+}
+
+/* 选项输入的文本区域 */
+.option-input textarea {
+  width: 100%; /* 确保宽度为100% */
+  height: 200px; /* 增加高度 */
+  flex: 1;
+  height: 60px;
+  resize: vertical;
+}
+
+/* 删除选项按钮 */
+.remove-option-btn {
+  background-color: transparent;
+  border: none;
+  color: #dc3545;
+  font-size: 24px;
+  margin-left: 10px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
+
+/* 添加选项和创建投票按钮 */
+#add-option-btn, #create-poll-btn {
+  display: inline-block;
+  padding: 12px 24px;
+  margin-right: 10px;
+  margin-top: 10px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+#add-option-btn {
+  background-color: #6c757d;
+  color: #fff;
+}
+
+#add-option-btn:hover {
+  background-color: #5a6268;
+}
+
+#create-poll-btn {
+  background-color: #007bff;
+  color: #fff;
+}
+
+#create-poll-btn:hover {
+  background-color: #0069d9;
+}
+
+/* 保留原有的按钮样式，供其他按钮使用 */
+button.standard-button {
+  background-color: var(--secondary-color);
+  color: #fff;
+  border: none;
+  padding: 12px 24px;
+  margin: 10px;
+  cursor: pointer;
+  font-size: 18px;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+button.standard-button:hover {
+  background-color: var(--accent-color);
+}
+
+#share-link-container {
+  margin-top: 20px;
+  text-align: center;
+}
+
+#poll-share-link {
+  width: 80%;
+  padding: 8px;
+  font-size: 16px;
+  margin-top: 10px;
+}
+
+#copy-link-button {
+  display: inline-block;
+  padding: 10px 20px;
+  margin-top: 10px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+
+
+/* 隐藏元素的实用类 */
+.hidden {
+  display: none;
+}
