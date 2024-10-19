@@ -1,4 +1,4 @@
-const generateUniqueId = require("../utils/generateUniqueId");
+const generateUniqueId = require("../utils/utilities").generateUniqueId;
 
 class APIController{
     constructor(sessionManager, webSocketServer){
@@ -18,6 +18,9 @@ class APIController{
             this.sessionManager.setOwnerToken(pollId, ownerToken);
 
             const pollUrl = `${req.protocol}://${req.get('host')}/poll/${pollId}?ownerToken=${ownerToken}`;
+            
+            console.log('req.get("host"):', req.get('host'));
+            console.log('global.serverURL:', global.serverURL);
 
             res.status(201).json({
                 pollId: pollId,

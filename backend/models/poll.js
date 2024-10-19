@@ -1,4 +1,4 @@
-const generateUniqueId = require("../utils/generateUniqueId");
+const generateUniqueId = require("../utils/utilities").generateUniqueId;
 
 class Poll {
   constructor(pollData) {

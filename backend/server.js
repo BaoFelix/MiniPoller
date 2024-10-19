@@ -19,6 +19,7 @@ const APIController = require("./controllers/apiController");
 const SessionManager = require("./models/sessionManager");
 const WebSocketServer = require("./services/webSocketServer");
 const apiRoutes = require("./routes/apiRoutes");
+const getLocalIPAddress = require("./utils/utilities").getLocalIPAddress;
 
 // Initialize an Express application
 const app = express();
@@ -26,6 +27,7 @@ const app = express();
 const server = http.createServer(app);
 // Set the port number for the server to listen on
 const port = process.env.PORT || 3000;
+const host = '0.0.0.0';
 
 // Middleware to parse JSON data in requests
 app.use(express.json());
@@ -39,7 +41,6 @@ const sessionManager = new SessionManager();
 const webSocketServer = new WebSocketServer(sessionManager);
 const apiController = new APIController(sessionManager, webSocketServer);
 
-// Set up API routes
 app.use("/api", apiRoutes(apiController));
 
 //Handle all other requests by serving the index.html file
@@ -51,6 +52,9 @@ app.get("*", (req, res) => {
 webSocketServer.initialize(server);
 
 // Start the server
-server.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+const localIP = getLocalIPAddress();
+server.listen(port, host, () => {
+  console.log(`Server is running at http://${localIP}:${port}/`);
+  
+  global.serverURL = `http://${localIP}:${port}/`;
 });

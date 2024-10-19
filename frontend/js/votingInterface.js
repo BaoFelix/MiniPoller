@@ -9,6 +9,8 @@ class VotingInterface {
     this.resultsChart = null; // Used to store the Chart.js instance
     this.chartContainer = null; // Used to store the chart container
     this.isOwner = false; // Flag to determine if the user is the poll owner
+
+    this.pollSharedLink = null;
   }
 
   render(container) {
@@ -53,7 +55,9 @@ class VotingInterface {
   }
 
   displayPoll() {
-    const { taskDescription, options } = this.pollData; // Destructure poll data
+    const { taskDescription, options} = this.pollData; // Destructure poll data
+    const url = `${window.location.protocol}//${window.location.host}`;
+    this.pollSharedLink  = this.getPollShareLink(url);
 
     // Set the inner HTML of the container to display the poll question and options
     this.container.innerHTML = `
@@ -70,8 +74,8 @@ class VotingInterface {
         this.isOwner
           ? `
         <div id="share-link-container">
-          <p>Share this link to invite others to vote:
-            <input type="text" id="poll-share-link" value="${this.getPollShareLink()}" readonly />
+            <p>Share this link to invite others to vote:</p>
+            <input type="text" id="poll-share-link" value="${this.pollSharedLink}" readonly />
             <button id="copy-link-button">Copy Link</button>
           </p>
         </div>
@@ -208,17 +212,32 @@ class VotingInterface {
     });
   }
 
-  getPollShareLink() {
-    const { protocol, host } = window.location;
-    return `${protocol}//${host}/poll/${this.pollId}`;
+  getPollShareLink(serverURL) {
+    return `${serverURL}/poll/${this.pollId}`;
   }
 
   async copyPollLink() {
-    const pollLink = this.getPollShareLink();
-  
     try {
-      await navigator.clipboard.writeText(pollLink);
-      alert("Link copied to clipboard!");
+      if(navigator.clipboard)
+      {
+        await navigator.clipboard.writeText(`${this.pollSharedLink}`);
+        alert("Link copied to clipboard!");
+      }
+      else{
+        const textArea = document.createElement("textarea");
+        textArea.value = this.pollSharedLink;
+        document.body.appendChild(textArea);
+        textArea.select();
+        try {
+          document.execCommand('copy');
+          alert("Link copied to clipboard!");
+        } catch (err) {
+          console.error('Failed to copy the link:', err);
+          alert("Failed to copy the link. Please copy it manually.");
+        }
+        document.body.removeChild(textArea);
+        return;
+      }
     } catch (err) {
       alert("Failed to copy the link. Please copy it manually.");
     }
