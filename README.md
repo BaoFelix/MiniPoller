@@ -60,7 +60,6 @@ To set up the project locally, follow these steps:
     - Results are updated in real-time as votes are cast.
 
 ## Contributing
-
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
 ## License
