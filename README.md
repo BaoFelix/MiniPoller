@@ -63,6 +63,8 @@ To set up the project locally, follow these steps:
 
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
+## License
+This project is licensed under the MIT License.
 ---
 
 Feel free to review this draft and suggest any changes or additional sections you'd like to include.
