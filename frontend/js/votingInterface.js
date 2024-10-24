@@ -54,12 +54,16 @@ class VotingInterface {
     }
   }
 
+  // Display fixed options for voting
   displayPoll() {
-    const { taskDescription, options} = this.pollData; // Destructure poll data
+    const { taskDescription } = this.pollData; // Destructure poll data without options
     const url = `${window.location.protocol}//${window.location.host}`;
-    this.pollSharedLink  = this.getPollShareLink(url);
+    this.pollSharedLink = this.getPollShareLink(url);
 
-    // Set the inner HTML of the container to display the poll question and options
+    // Define fixed voting options for Jira
+    const options = ['1', '2', '3', '5', '8'];
+
+    // Set the inner HTML of the container to display the poll question and fixed options
     this.container.innerHTML = `
       <h2>${taskDescription}</h2>
       <div id="options-container"></div>
@@ -77,8 +81,7 @@ class VotingInterface {
             <p>Share this link to invite others to vote:</p>
             <input type="text" id="poll-share-link" value="${this.pollSharedLink}" readonly />
             <button id="copy-link-button">Copy Link</button>
-          </p>
-        </div>
+          </div>
       `
           : ""
       }
@@ -87,6 +90,7 @@ class VotingInterface {
 
     const optionsContainer = this.container.querySelector("#options-container"); // Get the options container div
 
+    // Create vote buttons for fixed options
     options.forEach((option) => {
       const button = document.createElement("button"); // Create a button for each option
       button.textContent = option; // Set the button text to the option
@@ -95,11 +99,11 @@ class VotingInterface {
       this.voteButtons.push(button); // Store the button in the voteButtons array
     });
 
-    // If the user is the owner, add event listener to the end poll button
+    // If the user is the owner, add event listeners
     if (this.isOwner) {
       const endPollButton = this.container.querySelector("#end-poll-button");
       endPollButton.addEventListener("click", () => this.handleEndPoll());
-      
+
       const copyLinkButton = this.container.querySelector("#copy-link-button");
       copyLinkButton.addEventListener("click", () => this.copyPollLink());
     }
