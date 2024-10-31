@@ -5,8 +5,9 @@ class SocketManager {
     this.socket = null;
   }
 
-  //虽然在代码中没有明确指定服务器的 URL，但 Socket.IO 客户端库会默认连接到提供 HTML 文件的同一服务器。如果需要指定不同的服务器地址，可以在调用 io 函数时传递完整的 URL。
   connect(pollId) {
+    // Even though we don't need to specify the URL for the WebSocket connection, we can still use the io function from the socket.io-client library.
+    // If you need to connect to a different server, you can specify the URL as an argument to the io function.
     this.socket = io({
       query: {
         pollId: pollId,

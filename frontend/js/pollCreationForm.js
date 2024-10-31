@@ -2,7 +2,7 @@ class PollCreationForm {
   constructor(apiService) {
     this.apiService = apiService;
     this.formElement = document.createElement("form");
-    this.optionsContainer = null; // 用于存储选项容器
+    this.optionsContainer = null;
   }
 
   render(container) {
@@ -22,18 +22,19 @@ class PollCreationForm {
       <button type="submit" id="create-poll-btn">Create Poll</button>
     `;
 
-    // 初始化选项容器
+    // Initialize options container
     this.optionsContainer = this.formElement.querySelector('#options-container');
 
-    // 添加初始的两个选项输入框
+    // Add initial option inputs
     this.addOptionInput();
     this.addOptionInput();
 
-    // 绑定事件
+    // Bind add option button click event to addOptionInput method
     this.formElement.querySelector('#add-option-btn').addEventListener('click', () => this.addOptionInput());
+    // Bind form submit event to handleSubmit method
     this.formElement.addEventListener("submit", this.handleSubmit.bind(this));
 
-    // 将表单元素添加到提供的容器中
+    // Put the form element in the container
     container.appendChild(this.formElement);
   }
 

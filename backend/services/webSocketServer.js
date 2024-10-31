@@ -7,16 +7,24 @@ class WebSocketServer {
   }
 
   initialize(server) {
-    this.io = socketIO(server);
+    try {
+      this.io = socketIO(server);
 
-    this.io.on('connection', (socket) => {
-      this.onConnection(socket);
-    });
+      // Socket is the connection between the client and the server, it contains many functions to interact with the client
+      this.io.on('connection', (socket) => {
+        this.onConnection(socket);
+      });
+
+      console.log("WebSocket server initialized.");
+    } catch (error) {
+      console.error("Error initializing WebSocket server:", error.message);
+    }
   }
 
   onConnection(socket) {
     const pollId = socket.handshake.query.pollId;
     if (pollId) {
+      // Add the client to the room for the poll, so that it can spread messages to all clients connected to this room
       socket.join(pollId);
       console.log(`Client connected to poll ${pollId}`);
 
@@ -24,10 +32,12 @@ class WebSocketServer {
       if(poll)
       {
         const results = poll.getResults();
+
+        // Send the current poll results to all clients in the room
         this.io.to(pollId).emit('voteUpdate', results);
       }
 
-      // 监听 'vote' 事件
+      // Listen for vote events from the client
       socket.on('vote', (data) => this.onVote(socket, data));
 
       socket.on('disconnect', () => {
@@ -43,7 +53,6 @@ class WebSocketServer {
     try {
       const { pollId, option, userId } = data;
 
-      // 验证投票
       const poll = this.sessionManager.getPoll(pollId);
 
       if (!poll) {
@@ -53,10 +62,9 @@ class WebSocketServer {
 
       poll.addVote(option, userId);
 
-      // 获取更新后的结果
       const results = poll.getResults();
 
-      // 向房间内的所有客户端广播更新结果
+      // Send the current poll results to all clients in the room
       this.io.to(pollId).emit('voteUpdate', results);
 
       console.log(`Vote received for poll ${pollId}: ${option} by user ${userId}`);

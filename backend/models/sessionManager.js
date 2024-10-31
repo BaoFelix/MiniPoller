@@ -15,6 +15,9 @@ class SessionManager {
     }
 
     getPoll(pollId){
+        if (!this.polls.has(pollId)) {
+            throw new Error(`Poll with ID ${pollId} not found`);
+        }
         return this.polls.get(pollId);
     }
 
@@ -22,6 +25,8 @@ class SessionManager {
         const poll = this.polls.get(pollId);
         if(poll){
             poll.endPoll();
+            this.polls.delete(pollId);
+            this.ownerTokens.delete(pollId);
         }
         else{
             throw new Error(`Poll with ID ${pollId} not found`);

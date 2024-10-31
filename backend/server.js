@@ -1,42 +1,36 @@
 // Application's entry point from server side
-/*
-CommonJS (require):
-    主要用于 Node.js 环境。
-    语法：const module = require('module');
-    特点：同步加载模块，适用于服务器端。
-ES6 Modules (import):
-    主要用于现代浏览器和支持 ES6 模块的环境。
-    语法：import module from 'module';
-    特点：支持静态分析和优化，适用于客户端和现代 JavaScript 环境。
-
-Can specify the type in package.json.
-*/
-
+require("dotenv").config();
 const express = require("express");
 const http = require("http");
+const https = require("https");
+const fs = require("fs");
 const path = require("path");
+const helmet = require("helmet");
+const cors = require("cors");
 const APIController = require("./controllers/apiController");
 const SessionManager = require("./models/sessionManager");
 const WebSocketServer = require("./services/webSocketServer");
 const apiRoutes = require("./routes/apiRoutes");
 const getLocalIPAddress = require("./utils/utilities").getLocalIPAddress;
 
-// Initialize an Express application
+
+
+// Initialize an Express app to handle routing,  middleware and requests.
 const app = express();
-// Create an HTTP server to handle requests using the Express app
-const server = http.createServer(app);
+
 // Set the port number for the server to listen on
 const port = process.env.PORT || 3000;
-const host = '0.0.0.0';
+// Set the scope of the server to serve requests from any IP address
+const host = process.env.HOST || "0.0.0.0";
+const localIP = getLocalIPAddress();
+
 
 // Middleware to parse JSON data in requests
 app.use(express.json());
 // Middleware to provide access to the public directory(provide all static files in the public directory, such as images, CSS, and JavaScript files)
 // Also set "../frontend" as the root directory for URL requests
-app.use(express.static(path.join(__dirname, "../frontend")));
+app.use(express.static(path.join(__dirname, "../frontend"),{ maxAge: "7d" }));
 
-
-// Initialization
 const sessionManager = new SessionManager();
 const webSocketServer = new WebSocketServer(sessionManager);
 const apiController = new APIController(sessionManager, webSocketServer);
@@ -48,13 +42,32 @@ app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
-// Start the WebSocket server
+
+
+
+// Enable HTTPS if certificates are provided
+let server;
+if (process.env.HTTPS_ENABLED === "true") {
+  const httpsOptions = {
+    key: fs.readFileSync(process.env.SSL_KEY_PATH),
+    cert: fs.readFileSync(process.env.SSL_CERT_PATH)
+  };
+  server = https.createServer(httpsOptions, app);
+  console.log(`Using HTTPS`);
+} else {
+  server = http.createServer(app);
+  console.log(`Using HTTP`);
+}
+
+// Start the WebSocket server by sharing the HTTP server instance, so that it can listen for WebSocket connections
 webSocketServer.initialize(server);
 
+
+
+
 // Start the server
-const localIP = getLocalIPAddress();
 server.listen(port, host, () => {
   console.log(`Server is running at http://${localIP}:${port}/`);
-  
+
   global.serverURL = `http://${localIP}:${port}/`;
 });

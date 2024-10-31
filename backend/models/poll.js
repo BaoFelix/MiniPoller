@@ -2,6 +2,10 @@ const generateUniqueId = require("../utils/utilities").generateUniqueId;
 
 class Poll {
   constructor(pollData) {
+    if (!pollData || !pollData.taskDescription || !pollData.options || !Array.isArray(pollData.options) || pollData.options.length === 0) {
+      throw new Error("Invalid poll data. Ensure taskDescription and options are provided.");
+    }
+    
     this.pollId = generateUniqueId();
     this.isActive = true;
     this.taskDescription = pollData.taskDescription;
