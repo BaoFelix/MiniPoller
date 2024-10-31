@@ -59,6 +59,31 @@ To set up the project locally, follow these steps:
 3. **Viewing Results:**
     - Results are updated in real-time as votes are cast.
 
+Configuration
+.env Configuration
+To set up the environment variables, create a .env file in the backend directory with the following content:
+
+PORT=3000
+HOST=0.0.0.0
+HTTPS_ENABLED=false
+SSL_KEY_PATH=path/to/your/server.key
+SSL_CERT_PATH=path/to/your/server.cert
+PORT: The port on which the server will run.
+HOST: The host address for the server.
+HTTPS_ENABLED: Set to true to enable HTTPS, otherwise false.
+SSL_KEY_PATH: The file path to your SSL key.
+SSL_CERT_PATH: The file path to your SSL certificate.
+Using Public Network IP
+To connect to the internet using a public network IP instead of the local network by default, set the HOST variable in the .env file to your public IP address:
+
+HOST=your.public.ip.address
+Setting Up SSL for HTTPS
+To set up SSL for HTTPS, ensure HTTPS_ENABLED is set to true and provide the paths to your SSL key and certificate in the .env file:
+
+HTTPS_ENABLED=true
+SSL_KEY_PATH=path/to/your/server.key
+SSL_CERT_PATH=path/to/your/server.cert
+
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
