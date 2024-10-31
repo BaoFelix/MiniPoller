@@ -59,30 +59,60 @@ To set up the project locally, follow these steps:
 3. **Viewing Results:**
     - Results are updated in real-time as votes are cast.
 
-Configuration
-.env Configuration
-To set up the environment variables, create a .env file in the backend directory with the following content:
+## Configuration
 
+### .env Configuration
+
+To set up the environment variables, create a `.env` file in the `backend` directory with the following content:
+
+```plaintext
 PORT=3000
 HOST=0.0.0.0
 HTTPS_ENABLED=false
 SSL_KEY_PATH=path/to/your/server.key
 SSL_CERT_PATH=path/to/your/server.cert
-PORT: The port on which the server will run.
-HOST: The host address for the server.
-HTTPS_ENABLED: Set to true to enable HTTPS, otherwise false.
-SSL_KEY_PATH: The file path to your SSL key.
-SSL_CERT_PATH: The file path to your SSL certificate.
-Using Public Network IP
-To connect to the internet using a public network IP instead of the local network by default, set the HOST variable in the .env file to your public IP address:
+```
 
-HOST=your.public.ip.address
-Setting Up SSL for HTTPS
-To set up SSL for HTTPS, ensure HTTPS_ENABLED is set to true and provide the paths to your SSL key and certificate in the .env file:
+- `PORT`: The port on which the server will run.
+- `HOST`: The host address for the server.
+- `HTTPS_ENABLED`: Set to `true` to enable HTTPS, otherwise `false`.
+- `SSL_KEY_PATH`: The file path to your SSL key.
+- `SSL_CERT_PATH`: The file path to your SSL certificate.
 
+### Using Public Network IP
+
+To make the application accessible over the internet via a public IP address:
+
+1. Ensure your server has a public IP address. If your server is behind a router or firewall, you may need to configure port forwarding.
+2. Set `HOST` to `0.0.0.0` in your `.env` file. This will allow the server to listen on all available network interfaces, making it accessible both locally and from external networks.
+
+Example .env configuration:
+
+```plaintext
+HOST=0.0.0.0
+PORT=3000
+```
+
+Note: Avoid setting `HOST` directly to your public IP address; setting `0.0.0.0` is sufficient for accepting requests on all interfaces, including your public IP.
+
+### Setting Up SSL for HTTPS
+
+To enable HTTPS for secure communication:
+
+1. Obtain an SSL certificate: You can get a certificate from a trusted Certificate Authority (CA), or generate a self-signed certificate for testing purposes.
+2. Configure the `.env` file: Set `HTTPS_ENABLED` to `true`, and specify the paths to your SSL key and certificate files.
+
+Example .env configuration:
+
+```plaintext
 HTTPS_ENABLED=true
 SSL_KEY_PATH=path/to/your/server.key
 SSL_CERT_PATH=path/to/your/server.cert
+```
+
+Restart the server after updating the `.env` file for changes to take effect.
+
+Note: For production, use a certificate from a trusted CA to avoid browser security warnings.
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
