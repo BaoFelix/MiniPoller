@@ -23,7 +23,8 @@ class VotingInterface {
   async renderPoll(pollId, ownerToken = null) {
     this.pollId = pollId;
     this.ownerToken = ownerToken;
-    this.userId = this.generateUserId(); // Generate user ID
+    // Generate a unique identifier for this participant
+    this.userId = generateUserId();
 
     // Determine if the current user is the owner
     this.isOwner = ownerToken !== null;
@@ -306,7 +307,4 @@ class VotingInterface {
     this.resultsChart.update();
   }
 
-  generateUserId() {
-    return "user_" + Math.random().toString(36).substr(2, 9);
-  }
 }
