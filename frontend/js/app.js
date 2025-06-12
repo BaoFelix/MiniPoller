@@ -47,14 +47,15 @@ class ClientApp {
     this.uiComponents = new UIComponents(this.apiService, this.socketManager);
     this.pollId = null;
     this.ownerToken = null;
-    this.userId = this.generateUserID();
+    // Generate a unique ID for this client
+    this.userId = generateUserId();
 
     this.uiComponents.votingInterface.userId = this.userId;
   }
 
   initialize() {
     // Get the poll ID and owner token from the URL
-    const pollId = this.extractPollIdFormUrl();
+    const pollId = this.extractPollIdFromUrl();
     const urlParams = new URLSearchParams(window.location.search);
     const ownerToken = urlParams.get('ownerToken');
 
@@ -91,14 +92,10 @@ class ClientApp {
     }
   }
 
-  extractPollIdFormUrl() {
+  extractPollIdFromUrl() {
     const path = window.location.pathname;
     const match = path.match(/\/poll\/(.+)/);
     return match ? match[1] : null;
-  }
-
-  generateUserID() {
-    return "user_" + Math.random().toString(36).substr(2, 9);
   }
 }
 
