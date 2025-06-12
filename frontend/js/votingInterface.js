@@ -42,8 +42,8 @@ class VotingInterface {
         this.updateChartData(results);
       });
 
-      // If the poll is active, allow voting
-      if (!this.pollData.isEnded) {
+      // Enable or disable voting based on poll status
+      if (this.pollData.isActive) {
         this.enableVoting();
       } else {
         this.disableVoting();

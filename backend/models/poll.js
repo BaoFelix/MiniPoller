@@ -67,6 +67,7 @@ class Poll {
       taskDescription: this.taskDescription,
       options: this.options,
       displayStyle: this.displayStyle,
+      isActive: this.isActive,
     };
   }
 }
