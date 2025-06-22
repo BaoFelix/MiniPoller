@@ -12,6 +12,7 @@ const SessionManager = require("./models/sessionManager");
 const WebSocketServer = require("./services/webSocketServer");
 const apiRoutes = require("./routes/apiRoutes");
 const getLocalIPAddress = require("./utils/utilities").getLocalIPAddress;
+const { spawn } = require("child_process");
 
 
 
@@ -23,6 +24,24 @@ const port = process.env.PORT || 3000;
 // Set the scope of the server to serve requests from any IP address
 const host = process.env.HOST || "0.0.0.0";
 const localIP = getLocalIPAddress();
+
+// Launch the Windows text capture helper on Windows platforms
+if (process.platform === "win32") {
+  const captureExe = path.join(__dirname, "../windows_capture/ClaptureApp.exe");
+  if (fs.existsSync(captureExe)) {
+    const captureProcess = spawn(captureExe, [], { detached: true });
+    console.log(`Started text capture module`);
+    captureProcess.stdout.on("data", (data) => {
+      console.log(`[capture] ${data.toString().trim()}`);
+    });
+    captureProcess.stderr.on("data", (data) => {
+      console.error(`[capture] ${data.toString().trim()}`);
+    });
+    process.on("exit", () => captureProcess.kill());
+  } else {
+    console.log(`Capture executable not found at ${captureExe}`);
+  }
+}
 
 
 // Middleware to parse JSON data in requests

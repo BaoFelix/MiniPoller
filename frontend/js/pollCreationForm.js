@@ -36,6 +36,13 @@ class PollCreationForm {
 
     // Put the form element in the container
     container.appendChild(this.formElement);
+
+    // Prefill question from URL if provided
+    const params = new URLSearchParams(window.location.search);
+    const prefill = params.get('prefill');
+    if (prefill) {
+      this.formElement.querySelector('#poll-question').value = decodeURIComponent(prefill);
+    }
   }
 
   addOptionInput() {

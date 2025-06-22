@@ -114,6 +114,24 @@ Restart the server after updating the `.env` file for changes to take effect.
 
 Note: For production, use a certificate from a trusted CA to avoid browser security warnings.
 
+## Text Capture Integration (Windows)
+
+The repository includes a lightweight Windows helper located in `windows_capture/ClaptureApp.cpp`.
+When compiled, it allows you to select text anywhere on screen and quickly create a poll from it.
+
+### Building the Helper
+
+1. Open the `ClaptureApp.cpp` file in Visual Studio 2022.
+2. Build it as a **Win32 Console Application**.
+3. The resulting `ClaptureApp.exe` should be placed in `windows_capture/`.
+
+### Using
+
+When you start the backend server on Windows (`npm start` in the `backend` directory),
+the helper is launched automatically. Drag to select text and release; a small menu
+appears near the cursor. Choose **Create Poll** to open your browser with the
+poll question pre-filled.
+
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
 
