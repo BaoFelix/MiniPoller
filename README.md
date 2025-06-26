@@ -47,8 +47,13 @@ To set up the project locally, follow these steps:
     npm start
     ```
 
+<<<<<<< codex/add-.env-to-.gitignore-and-update-readme
 5. **Open the frontend in a browser:**
     Simply open the `index.html` file located in the `frontend` directory.
+=======
+4. **Open the frontend in a browser:**
+    Navigate to `http://localhost:3000/` after starting the backend.
+>>>>>>> main
 
 ## Usage
 
@@ -127,24 +132,25 @@ Note: For production, use a certificate from a trusted CA to avoid browser secur
 
 ## Text Capture Integration (Windows)
 
-The repository includes a lightweight Windows helper located in `windows_capture/ClaptureApp.cpp`.
-When compiled, it allows you to select text anywhere on screen and quickly create a poll from it.
+MiniPoller includes a small Windows utility called `OverlayPoller.exe` located
+in `windows_capture/OverlayPoller.cpp`.
 
 ### Building the Helper
 
-1. Open the `ClaptureApp.cpp` file in Visual Studio 2022.
+1. Open `OverlayPoller.cpp` in Visual Studio 2022.
 2. Build it as a **Win32 Console Application**.
-3. The resulting `ClaptureApp.exe` should be placed in `windows_capture/`.
+3. Place the resulting `ClaptureApp.exe` in `windows_capture/`.
+4. Optional: set the `HOST` and `PORT` environment variables before running the helper to
+   specify the MiniPoller backend address. If these are not set, the helper
+   defaults to `localhost` and `3000`.
 
 ### Using
 
-When you start the backend server on Windows (`npm start` in the `backend` directory),
-the helper is launched automatically. Drag to select text and release; a small menu
-appears near the cursor. Choose **Create Poll** to open your browser with the
-poll question pre-filled. The backend monitors the helper process and will
-restart it if it exits unexpectedly. When MiniPoller shuts down (for example by
-pressing `Ctrl+C`), the helper is terminated automatically to avoid leaving
-orphaned processes running.
+1. Start the backend server (`npm start` inside the `backend` folder`).
+2. `OverlayPoller.exe` launches automatically.
+3. Select text anywhere on screen. When you release the mouse, an overlay
+   window appears allowing you to submit a poll.
+4. Closing the server stops the helper process automatically.
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.

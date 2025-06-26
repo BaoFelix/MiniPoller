@@ -4,8 +4,13 @@ node_modules/
 # Editor directories and files
 .vscode/
 
+<<<<<<< codex/add-.env-to-.gitignore-and-update-readme
 # Executables
 voting-app.exe
 
 # Environment files
 .env
+=======
+# Executable binaries
+*.exe
+>>>>>>> main

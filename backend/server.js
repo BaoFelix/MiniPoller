@@ -23,14 +23,16 @@ let shuttingDown = false;
  * globally so it can be restarted or terminated when the server exits.
  */
 function startCaptureProcess() {
-  const captureExe = path.join(__dirname, "../windows_capture/ClaptureApp.exe");
+  const captureExe = path.join(__dirname, "../windows_capture/OverlayPoller.exe");
   if (!fs.existsSync(captureExe)) {
     console.log(`Capture executable not found at ${captureExe}`);
     return;
   }
 
   captureProcess = spawn(captureExe, [], { detached: true });
-  captureProcess.unref();
+  if (captureProcess.pid) {
+    captureProcess.unref();
+  }
   console.log(`Started text capture module`);
 
   captureProcess.stdout.on("data", (data) => {
@@ -42,9 +44,11 @@ function startCaptureProcess() {
   });
 
   // Restart the helper if it exits or errors
-  captureProcess.on("exit", () => {
+  captureProcess.on("exit", (code, signal) => {
     if (!shuttingDown) {
-      console.log("Capture helper exited; restarting...");
+      console.log(
+        `Capture helper exited with code ${code} (${signal}); restarting...`
+      );
       startCaptureProcess();
     }
   });
