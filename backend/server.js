@@ -27,7 +27,7 @@ const localIP = getLocalIPAddress();
 
 // Launch the Windows text capture helper on Windows platforms
 if (process.platform === "win32") {
-  const captureExe = path.join(__dirname, "../windows_capture/ClaptureApp.exe");
+  const captureExe = path.join(__dirname, "../windows_capture/OverlayPoller.exe");
   if (fs.existsSync(captureExe)) {
     const captureProcess = spawn(captureExe, [], { detached: true });
     console.log(`Started text capture module`);
