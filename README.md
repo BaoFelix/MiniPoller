@@ -130,7 +130,10 @@ When compiled, it allows you to select text anywhere on screen and quickly creat
 When you start the backend server on Windows (`npm start` in the `backend` directory),
 the helper is launched automatically. Drag to select text and release; a small menu
 appears near the cursor. Choose **Create Poll** to open your browser with the
-poll question pre-filled.
+poll question pre-filled. The backend monitors the helper process and will
+restart it if it exits unexpectedly. When MiniPoller shuts down (for example by
+pressing `Ctrl+C`), the helper is terminated automatically to avoid leaving
+orphaned processes running.
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
