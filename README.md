@@ -123,7 +123,10 @@ in `windows_capture/OverlayPoller.cpp`.
 
 1. Open `OverlayPoller.cpp` in Visual Studio 2022.
 2. Build it as a **Win32 Console Application**.
-3. Copy the resulting `OverlayPoller.exe` into the `windows_capture` directory.
+3. Place the resulting `ClaptureApp.exe` in `windows_capture/`.
+4. Optional: set the `HOST` and `PORT` environment variables before running the helper to
+   specify the MiniPoller backend address. If these are not set, the helper
+   defaults to `localhost` and `3000`.
 
 ### Using
 
