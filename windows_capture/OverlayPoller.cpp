@@ -9,14 +9,6 @@
 #include <cstdlib>
 #pragma comment(lib, "winhttp.lib")
 
-struct CaptureData {
-    std::wstring text;
-};
-
-CaptureData g_captureData{L""};
-bool g_captureAvailable = false;
-CRITICAL_SECTION g_captureLock;
-
 bool g_isDragging = false;
 POINT g_startPoint{0,0};
 POINT g_endPoint{0,0};
@@ -57,7 +49,6 @@ DWORD WINAPI MouseHookThread(LPVOID lpParam)
 int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int)
 {
     std::setlocale(LC_ALL, "");
-    InitializeCriticalSection(&g_captureLock);
     HANDLE hThread = CreateThread(NULL,0,MouseHookThread,NULL,0,NULL);
     MSG msg;
     while(GetMessage(&msg,NULL,0,0)) {
@@ -65,7 +56,6 @@ int WINAPI wWinMain(HINSTANCE, HINSTANCE, PWSTR, int)
     }
     PostThreadMessage(GetThreadId(hThread), WM_QUIT,0,0);
     WaitForSingleObject(hThread,INFINITE);
-    DeleteCriticalSection(&g_captureLock);
     return 0;
 }
 
@@ -107,10 +97,6 @@ void PerformCapture()
     std::wstring captured = GetClipboardText();
     ShowWindow(hConsole, SW_SHOW);
     if(captured.empty()) return;
-    EnterCriticalSection(&g_captureLock);
-    g_captureData.text=captured;
-    g_captureAvailable=true;
-    LeaveCriticalSection(&g_captureLock);
     ShowOverlayWindow(captured);
 }
 
@@ -185,14 +171,6 @@ LRESULT CALLBACK OverlayWndProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lPara
     return DefWindowProc(hwnd,msg,wParam,lParam);
 }
 
-std::wstring ToUTF8(const std::wstring &w)
-{
-    if(w.empty()) return std::string().c_str();
-    int size=WideCharToMultiByte(CP_UTF8,0,w.c_str(),-1,NULL,0,NULL,NULL);
-    std::string s(size-1,0);
-    WideCharToMultiByte(CP_UTF8,0,w.c_str(),-1,s.data(),size,NULL,NULL);
-    return std::wstring(s.begin(), s.end());
-}
 
 bool SubmitPoll(const std::wstring &q, const std::vector<std::wstring> &opts, std::wstring &outUrl)
 {

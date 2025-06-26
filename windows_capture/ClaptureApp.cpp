@@ -10,15 +10,6 @@
 #include <locale>
 #include <sstream>
 
-// Structure to hold the captured data (text only)
-struct CaptureData {
-    std::wstring text;   // Captured text
-};
-
-CaptureData g_captureData = { L"" };
-bool g_captureAvailable = false;
-CRITICAL_SECTION g_captureLock;
-
 // Global variables for mouse drag state
 bool g_isDragging = false;
 POINT g_startPoint = { 0, 0 };
@@ -61,8 +52,6 @@ int main()
     // Set locale for Unicode output.
     std::setlocale(LC_ALL, "");
 
-    // Initialize critical section for thread safety.
-    InitializeCriticalSection(&g_captureLock);
 
     // Create a thread for the mouse hook.
     HANDLE hThread = CreateThread(NULL, 0, MouseHookThread, NULL, 0, NULL);
@@ -86,7 +75,6 @@ int main()
     WaitForSingleObject(hThread, INFINITE);
     CloseHandle(hThread);
 
-    DeleteCriticalSection(&g_captureLock);
     return 0;
 }
 
@@ -174,11 +162,6 @@ void PerformCapture()
     if (capturedText.empty())
         return;
 
-    // Store the captured text.
-    EnterCriticalSection(&g_captureLock);
-    g_captureData.text = capturedText;
-    g_captureAvailable = true;
-    LeaveCriticalSection(&g_captureLock);
 
     // Show a simple context menu at the cursor position.
     HMENU hMenu = CreatePopupMenu();
