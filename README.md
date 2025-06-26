@@ -123,7 +123,10 @@ When compiled, it allows you to select text anywhere on screen and quickly creat
 
 1. Open the `ClaptureApp.cpp` file in Visual Studio 2022.
 2. Build it as a **Win32 Console Application**.
-3. The resulting `ClaptureApp.exe` should be placed in `windows_capture/`.
+3. Place the resulting `ClaptureApp.exe` in `windows_capture/`.
+4. Optional: set the `HOST` and `PORT` environment variables before running the helper to
+   specify the MiniPoller backend address. If these are not set, the helper
+   defaults to `localhost` and `3000`.
 
 ### Using
 

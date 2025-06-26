@@ -6,6 +6,7 @@
 #include <sstream>
 #include <locale>
 #include <algorithm>
+#include <cstdlib>
 #pragma comment(lib, "winhttp.lib")
 
 struct CaptureData {
@@ -195,9 +196,23 @@ std::wstring ToUTF8(const std::wstring &w)
 
 bool SubmitPoll(const std::wstring &q, const std::vector<std::wstring> &opts, std::wstring &outUrl)
 {
+    wchar_t host[256];
+    DWORD hlen = GetEnvironmentVariableW(L"HOST", host, 256);
+    if(hlen == 0 || hlen >= 256) {
+        wcscpy_s(host, L"localhost");
+    }
+
+    wchar_t portStr[16];
+    DWORD plen = GetEnvironmentVariableW(L"PORT", portStr, 16);
+    int port = 3000;
+    if(plen > 0 && plen < 16) {
+        int tmp = _wtoi(portStr);
+        if(tmp > 0) port = tmp;
+    }
+
     HINTERNET hSession = WinHttpOpen(L"OverlayPoller", WINHTTP_ACCESS_TYPE_NO_PROXY, NULL, NULL, 0);
     if(!hSession) return false;
-    HINTERNET hConnect = WinHttpConnect(hSession, L"localhost", 3000, 0);
+    HINTERNET hConnect = WinHttpConnect(hSession, host, port, 0);
     if(!hConnect){ WinHttpCloseHandle(hSession); return false; }
     HINTERNET hRequest = WinHttpOpenRequest(hConnect, L"POST", L"/api/polls", NULL, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, 0);
     if(!hRequest){ WinHttpCloseHandle(hConnect); WinHttpCloseHandle(hSession); return false; }
