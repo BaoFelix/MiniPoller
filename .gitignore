@@ -5,4 +5,7 @@ node_modules/
 .vscode/
 
 # Executables
-voting-app.exe/
+voting-app.exe
+
+# Environment files
+.env

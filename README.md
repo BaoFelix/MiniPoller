@@ -37,12 +37,17 @@ To set up the project locally, follow these steps:
     npm install
     ```
 
-3. **Start the backend server:**
+3. **Create your environment file:**
+    ```bash
+    cp .env.example .env
+    ```
+
+4. **Start the backend server:**
     ```bash
     npm start
     ```
 
-4. **Open the frontend in a browser:**
+5. **Open the frontend in a browser:**
     Simply open the `index.html` file located in the `frontend` directory.
 
 ## Usage
@@ -63,7 +68,13 @@ To set up the project locally, follow these steps:
 
 ### .env Configuration
 
-To set up the environment variables, create a `.env` file in the `backend` directory with the following content:
+To set up the environment variables, copy the example file and then edit it as needed:
+
+```bash
+cp backend/.env.example backend/.env
+```
+
+The default template includes:
 
 ```plaintext
 PORT=3000
