@@ -14,6 +14,49 @@ const apiRoutes = require("./routes/apiRoutes");
 const getLocalIPAddress = require("./utils/utilities").getLocalIPAddress;
 const { spawn } = require("child_process");
 
+// Hold reference to the capture helper so we can manage its lifecycle
+let captureProcess;
+let shuttingDown = false;
+
+/**
+ * Start the Windows capture helper if available. The spawned process is stored
+ * globally so it can be restarted or terminated when the server exits.
+ */
+function startCaptureProcess() {
+  const captureExe = path.join(__dirname, "../windows_capture/ClaptureApp.exe");
+  if (!fs.existsSync(captureExe)) {
+    console.log(`Capture executable not found at ${captureExe}`);
+    return;
+  }
+
+  captureProcess = spawn(captureExe, [], { detached: true });
+  captureProcess.unref();
+  console.log(`Started text capture module`);
+
+  captureProcess.stdout.on("data", (data) => {
+    console.log(`[capture] ${data.toString().trim()}`);
+  });
+
+  captureProcess.stderr.on("data", (data) => {
+    console.error(`[capture] ${data.toString().trim()}`);
+  });
+
+  // Restart the helper if it exits or errors
+  captureProcess.on("exit", () => {
+    if (!shuttingDown) {
+      console.log("Capture helper exited; restarting...");
+      startCaptureProcess();
+    }
+  });
+
+  captureProcess.on("error", (err) => {
+    if (!shuttingDown) {
+      console.error(`Capture helper error: ${err}`);
+      startCaptureProcess();
+    }
+  });
+}
+
 
 
 // Initialize an Express app to handle routing,  middleware and requests.
@@ -27,20 +70,22 @@ const localIP = getLocalIPAddress();
 
 // Launch the Windows text capture helper on Windows platforms
 if (process.platform === "win32") {
-  const captureExe = path.join(__dirname, "../windows_capture/OverlayPoller.exe");
-  if (fs.existsSync(captureExe)) {
-    const captureProcess = spawn(captureExe, [], { detached: true });
-    console.log(`Started text capture module`);
-    captureProcess.stdout.on("data", (data) => {
-      console.log(`[capture] ${data.toString().trim()}`);
-    });
-    captureProcess.stderr.on("data", (data) => {
-      console.error(`[capture] ${data.toString().trim()}`);
-    });
-    process.on("exit", () => captureProcess.kill());
-  } else {
-    console.log(`Capture executable not found at ${captureExe}`);
-  }
+  startCaptureProcess();
+
+  const terminateHelper = () => {
+    if (captureProcess) {
+      shuttingDown = true;
+      captureProcess.kill();
+    }
+  };
+
+  process.on("exit", terminateHelper);
+  ["SIGINT", "SIGTERM"].forEach((sig) =>
+    process.on(sig, () => {
+      terminateHelper();
+      process.exit();
+    })
+  );
 }
 
 
