@@ -30,7 +30,9 @@ function startCaptureProcess() {
   }
 
   captureProcess = spawn(captureExe, [], { detached: true });
-  captureProcess.unref();
+  if (captureProcess.pid) {
+    captureProcess.unref();
+  }
   console.log(`Started text capture module`);
 
   captureProcess.stdout.on("data", (data) => {
@@ -42,9 +44,11 @@ function startCaptureProcess() {
   });
 
   // Restart the helper if it exits or errors
-  captureProcess.on("exit", () => {
+  captureProcess.on("exit", (code, signal) => {
     if (!shuttingDown) {
-      console.log("Capture helper exited; restarting...");
+      console.log(
+        `Capture helper exited with code ${code} (${signal}); restarting...`
+      );
       startCaptureProcess();
     }
   });
