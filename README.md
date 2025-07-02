@@ -132,25 +132,25 @@ Note: For production, use a certificate from a trusted CA to avoid browser secur
 
 ## Text Capture Integration (Windows)
 
-MiniPoller includes a small Windows utility called `OverlayPoller.exe` located
-in `windows_capture/OverlayPoller.cpp`.
+MiniPoller now ships with a lightweight JavaScript helper that handles text
+selection and polling UI on Windows. The script is located at
+`windows_capture/captureHelper.js` and is launched automatically when the
+backend starts on Windows platforms.
 
-### Building the Helper
-
-1. Open `OverlayPoller.cpp` in Visual Studio 2022.
-2. Build it as a **Win32 Console Application**.
-3. Place the resulting `ClaptureApp.exe` in `windows_capture/`.
-4. Optional: set the `HOST` and `PORT` environment variables before running the helper to
-   specify the MiniPoller backend address. If these are not set, the helper
-   defaults to `localhost` and `3000`.
+The helper is an Electron process that listens for drag selection events,
+captures the highlighted text and displays a small "Create Poll" overlay near
+your cursor. Clicking the overlay opens a compact poll creation window with the
+captured text pre‑filled.
 
 ### Using
 
-1. Start the backend server (`npm start` inside the `backend` folder`).
-2. `OverlayPoller.exe` launches automatically.
-3. Select text anywhere on screen. When you release the mouse, an overlay
-   window appears allowing you to submit a poll.
-4. Closing the server stops the helper process automatically.
+1. Install backend dependencies (`npm install` inside the `backend` folder`).
+2. Start the server with `npm start`. On Windows the helper launches
+   automatically.
+3. Select text anywhere on screen. When you release the mouse a small overlay
+   appears offering to create a poll.
+4. Clicking the overlay opens the poll dialog. Closing the server stops the
+   helper process automatically.
 
 ## Contributing
 Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
