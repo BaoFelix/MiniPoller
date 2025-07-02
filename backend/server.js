@@ -23,13 +23,13 @@ let shuttingDown = false;
  * globally so it can be restarted or terminated when the server exits.
  */
 function startCaptureProcess() {
-  const captureExe = path.join(__dirname, "../windows_capture/OverlayPoller.exe");
-  if (!fs.existsSync(captureExe)) {
-    console.log(`Capture executable not found at ${captureExe}`);
+  const helperScript = path.join(__dirname, "../windows_capture/captureHelper.js");
+  if (!fs.existsSync(helperScript)) {
+    console.log(`Capture script not found at ${helperScript}`);
     return;
   }
 
-  captureProcess = spawn(captureExe, [], { detached: true });
+  captureProcess = spawn(process.execPath, [helperScript], { detached: true });
   if (captureProcess.pid) {
     captureProcess.unref();
   }
