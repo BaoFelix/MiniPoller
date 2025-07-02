@@ -31,29 +31,30 @@ To set up the project locally, follow these steps:
     cd MiniPoller
     ```
 
-2. **Navigate to the backend directory and install dependencies:**
+2. **Ensure Node.js 18 or higher is installed** (use [nvm](https://github.com/nvm-sh/nvm) if needed):
+    ```bash
+    nvm install 18
+    nvm use 18
+    ```
+
+3. **Navigate to the backend directory and install dependencies:**
     ```bash
     cd backend
     npm install
     ```
 
-3. **Create your environment file:**
+4. **Create your environment file:**
     ```bash
     cp .env.example .env
     ```
 
-4. **Start the backend server:**
+5. **Start the backend server:**
     ```bash
     npm start
     ```
 
-<<<<<<< codex/add-.env-to-.gitignore-and-update-readme
-5. **Open the frontend in a browser:**
-    Simply open the `index.html` file located in the `frontend` directory.
-=======
-4. **Open the frontend in a browser:**
+6. **Open the frontend in a browser:**
     Navigate to `http://localhost:3000/` after starting the backend.
->>>>>>> main
 
 ## Usage
 
