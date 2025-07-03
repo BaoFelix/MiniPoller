@@ -1,0 +1,14 @@
+{
+  "name": "windows-capture",
+  "version": "1.0.0",
+  "description": "Windows screen capture helper",
+  "main": "captureHelper.js",
+  "dependencies": {
+    "clipboardy": "^3.0.0",
+    "electron": "^22.3.27",
+    "uiohook-napi": "^1.5.4"
+  },
+  "devDependencies": {
+    "electron-rebuild": "^3.2.9"
+  }
+}

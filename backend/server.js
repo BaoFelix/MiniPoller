@@ -29,7 +29,21 @@ function startCaptureProcess() {
     return;
   }
 
-  captureProcess = spawn(process.execPath, [helperScript], { detached: true });
+  // Try to find electron executable
+  const electronPath = path.join(__dirname, "node_modules", ".bin", "electron.cmd");
+  const electronPathAlt = path.join(__dirname, "..", "windows_capture", "node_modules", ".bin", "electron.cmd");
+  
+  let electronExec = electronPath;
+  if (!fs.existsSync(electronPath) && fs.existsSync(electronPathAlt)) {
+    electronExec = electronPathAlt;
+  }
+  
+  if (!fs.existsSync(electronExec)) {
+    console.log(`Electron not found at ${electronPath} or ${electronPathAlt}`);
+    return;
+  }
+
+  captureProcess = spawn(electronExec, [helperScript], { detached: true });
   if (captureProcess.pid) {
     captureProcess.unref();
   }
