@@ -25,11 +25,31 @@ body {
 
 /* 容器样式 */
 .container, #app {
-  max-width: 600px;
-  margin: 50px auto;
+  max-width: 800px;
+  margin: 20px auto;
   background-color: #fff;
-  padding: 20px 30px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 30px 40px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+}
+
+/* Poll creation header */
+.poll-creation-header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.poll-creation-header h1 {
+  font-size: 2.5rem;
+  margin-bottom: 10px;
+  color: #007bff;
+  font-weight: 700;
+}
+
+.poll-creation-header .subtitle {
+  color: #6c757d;
+  font-size: 1.1rem;
+  margin: 0;
 }
 
 /* 标题样式 */
@@ -47,21 +67,38 @@ form {
 
 /* 表单组样式 */
 .form-group {
-  margin-bottom: 25px;
+  margin-bottom: 30px;
+}
+
+/* 表单组内所有元素左对齐 */
+.form-group > * {
+  margin-left: 0;
+  margin-right: 0;
 }
 
 /* 标签样式 */
 .form-group label {
-  display: block; /* 确保标签占据整行 */
+  display: block;
   font-weight: 600;
-  margin-bottom: 10px;
+  margin-bottom: 12px;
   color: #495057;
+  font-size: 1.1rem;
+  margin-left: 0; /* 确保标签左对齐 */
+}
+
+/* Options help text */
+.options-help {
+  font-size: 0.9rem;
+  color: #6c757d;
+  margin: 5px 0 15px 0;
+  font-style: italic;
+  margin-left: 0; /* 确保帮助文本左对齐 */
 }
 
 /* 输入框和文本区域的通用样式 */
 .form-group input[type="text"],
 .form-group textarea {
-  display: block; /* 确保输入框和文本区域占据整行 */
+  display: block;
   width: 100%;
   padding: 12px;
   border: 1px solid #ced4da;
@@ -74,62 +111,120 @@ form {
 
 /* 文本区域特定样式 */
 .form-group textarea {
-  height: 100px; /* 根据需要调整高度 */
+  height: 100px;
   resize: vertical;
 }
 
-/* 针对“Poll Question”的 textarea 样式 */
+/* 针对"Poll Question"的 textarea 样式 */
 #question-container .question-input textarea {
-  width: 100%; /* 确保宽度为100% */
-  height: 200px; /* 增加高度 */
-  padding: 12px;
-  border: 1px solid #ced4da;
-  border-radius: 4px;
+  width: 100%;
+  height: 120px; /* 增加高度从120px到160px */
+  padding: 15px; /* 增加内边距从15px到20px */
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
   font-size: 16px;
-  resize: vertical; /* 允许用户调整高度 */
+  line-height: 1.5; /* 增加行高让文本更易读 */
+  resize: vertical;
   color: #495057;
   background-color: #fff;
   outline: none;
+  transition: border-color 0.2s ease;
 }
 
-/* 选项输入容器 */
+#question-container .question-input textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Options container - 确保选项输入框容器的布局 */
+#options-container {
+  margin-top: 0; /* 移除上边距，让选项紧跟标签 */
+  width: 80%; /* 确保占满容器宽度 */
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* 让所有子元素伸展到容器宽度 */
+}
+
+/* 选项输入容器 - 确保与标签完全对齐 */
 .option-input {
   display: flex;
   align-items: flex-start;
   margin-bottom: 15px;
+  gap: 10px;
+  width: 100%; /* 确保占满容器宽度 */
+  box-sizing: border-box; /* 确保padding包含在宽度内 */
 }
 
 /* 选项输入的文本区域 */
 .option-input textarea {
-  width: 100%; /* 确保宽度为100% */
-  height: 200px; /* 增加高度 */
   flex: 1;
-  height: 60px;
+  height: 40px; /* 减少高度从80px到40px */
+  padding: 8px 12px; /* 减少垂直内边距 */
+  border: 2px solid #e9ecef;
+  border-radius: 6px;
+  font-size: 15px;
   resize: vertical;
+  color: #495057;
+  background-color: #fff;
+  outline: none;
+  transition: border-color 0.2s ease;
+  margin: 0; /* 移除任何默认边距 */
+  box-sizing: border-box; /* 确保padding包含在宽度内 */
+}
+
+.option-input textarea:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 /* 删除选项按钮 */
 .remove-option-btn {
-  background-color: transparent;
-  border: none;
+  background-color: #fff;
+  border: 2px solid #dc3545;
   color: #dc3545;
-  font-size: 24px;
-  margin-left: 10px;
+  font-size: 16px;
+  width: 40px;
+  height: 40px;
+  border-radius: 6px;
   cursor: pointer;
   padding: 0;
   line-height: 1;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 5px;
+  flex-shrink: 0; /* 防止按钮被压缩 */
+  margin-left: 0; /* 确保左对齐 */
+  margin-right: 0; /* 确保右对齐 */
+}
+
+.remove-option-btn:hover {
+  background-color: #dc3545;
+  color: white;
+  transform: translateY(-1px);
+}
+
+/* 表单按钮区域 */
+.form-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-top: 40px;
+  flex-wrap: wrap;
 }
 
 /* 添加选项和创建投票按钮 */
 #add-option-btn, #create-poll-btn {
   display: inline-block;
-  padding: 12px 24px;
-  margin-right: 10px;
-  margin-top: 10px;
+  padding: 15px 30px;
   font-size: 16px;
+  font-weight: 600;
   border: none;
-  border-radius: 4px;
+  border-radius: 8px;
   cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 #add-option-btn {
@@ -139,6 +234,8 @@ form {
 
 #add-option-btn:hover {
   background-color: #5a6268;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
 }
 
 #create-poll-btn {
@@ -148,6 +245,8 @@ form {
 
 #create-poll-btn:hover {
   background-color: #0069d9;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
 }
 
 /* 保留原有的按钮样式，供其他按钮使用 */
@@ -168,26 +267,107 @@ button.standard-button:hover {
 }
 
 #share-link-container {
-  margin-top: 20px;
+  margin: 15px 0;
   text-align: center;
 }
 
 #poll-share-link {
-  width: 80%;
-  padding: 8px;
-  font-size: 16px;
-  margin-top: 10px;
+  border: 1px solid #ced4da;
+  border-radius: 4px;
+  background-color: #f8f9fa;
+  color: #495057;
+  outline: none;
+}
+
+#poll-share-link:focus {
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 #copy-link-button {
-  display: inline-block;
-  padding: 10px 20px;
-  margin-top: 10px;
-  font-size: 16px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.2s ease;
 }
 
+#copy-link-button:hover {
+  background-color: #0056b3;
+}
 
+/* Chart container styles */
+#chart-container {
+  margin: 20px auto;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  padding: 20px;
+}
+
+/* Options container styles */
+#options-container {
+  margin: 20px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+#options-container button {
+  padding: 12px 24px;
+  font-size: 16px;
+  border: 2px solid #007bff;
+  border-radius: 6px;
+  background-color: white;
+  color: #007bff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-width: 120px;
+}
+
+/* 桌面端（Electron）按钮优化 */
+@media (max-width: 800px) {
+  #options-container button {
+    padding: 10px 20px;
+    font-size: 14px;
+    min-width: 100px;
+  }
+}
+
+#options-container button:hover {
+  background-color: #007bff;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0,123,255,0.3);
+}
+
+#options-container button:disabled {
+  background-color: #6c757d;
+  border-color: #6c757d;
+  color: white;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* End poll button styles */
+#end-poll-button {
+  background-color: #dc3545;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 20px;
+  transition: background-color 0.2s ease;
+}
+
+#end-poll-button:hover {
+  background-color: #c82333;
+}
 
 /* 隐藏元素的实用类 */
 .hidden {

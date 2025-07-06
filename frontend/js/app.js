@@ -1,39 +1,39 @@
 // Main JS file that initializes the app
-/*浏览器加载网页的流程
-DNS 解析：
+/*
+Browser webpage loading process:
 
-用户在浏览器地址栏中输入 URL（例如 http://example.com/index.html）。
-浏览器通过 DNS 解析将域名转换为服务器的 IP 地址。
-发送 HTTP 请求：
+DNS Resolution:
+- User enters URL in browser address bar (e.g., http://example.com/index.html)
+- Browser converts domain name to server IP address through DNS resolution
 
-浏览器向服务器发送 HTTP 请求，要求获取 index.html 文件。
-服务器响应：
+HTTP Request:
+- Browser sends HTTP request to server requesting index.html file
+- Server receives request and returns index.html file as response
 
-服务器接收到请求后，返回 index.html 文件作为响应。
-解析 HTML：
+HTML Parsing:
+- Browser receives index.html file and begins parsing HTML content
+- During parsing, browser encounters various tags (<head>, <body>, <script>, etc.) and loads corresponding resources
 
-浏览器接收到 index.html 文件后，开始解析 HTML 内容。
-在解析过程中，浏览器会遇到各种标签（如 <head>、<body>、<script> 等），并根据这些标签加载相应的资源。
-加载和执行 JavaScript 文件：
+JavaScript File Loading and Execution:
+- When browser encounters <script> tags, it downloads specified JavaScript files (e.g., js/apiService.js)
+- Browser parses and executes JavaScript code after downloading
 
-当浏览器遇到 <script> 标签时，会根据 src 属性下载指定的 JavaScript 文件（如 js/apiService.js）。
-浏览器下载文件后，会解析并执行其中的 JavaScript 代码。
-构建 DOM 树：
+DOM Tree Construction:
+- Browser parses HTML file and constructs DOM tree (Document Object Model)
+- DOM tree represents HTML document structure, including all elements and attributes
 
-浏览器解析 HTML 文件并构建 DOM 树（Document Object Model）。
-DOM 树表示 HTML 文档的结构，包含所有的元素和属性。
-构建 CSSOM 树：
+CSSOM Tree Construction:
+- Browser parses CSS files and constructs CSSOM tree (CSS Object Model)
+- CSSOM tree represents style information, including all style rules
 
-浏览器解析 CSS 文件并构建 CSSOM 树（CSS Object Model）。
-CSSOM 树表示样式信息，包含所有的样式规则。
-合并 DOM 树和 CSSOM 树：
+Merge DOM and CSSOM Trees:
+- Browser merges DOM tree and CSSOM tree to generate render tree
+- Render tree contains layout and style information for each visible element
 
-浏览器将 DOM 树和 CSSOM 树合并，生成渲染树。
-渲染树包含每个可见元素的布局和样式信息。
-布局和绘制：
-
-浏览器根据渲染树计算每个元素的布局（位置和大小）。
-浏览器将元素绘制到屏幕上，完成页面的渲染。*/
+Layout and Rendering:
+- Browser calculates layout (position and size) for each element based on render tree
+- Browser renders elements to screen, completing page rendering
+*/
 
 // Since all components are imported in the index.html file, we don't need to import them here
 // import ApiService from './apiService.js';

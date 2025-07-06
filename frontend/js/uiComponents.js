@@ -1,4 +1,4 @@
-// Manges the UI components of the application
+// Manages the UI components of the application
 
 class UIComponents {
   constructor(apiService, socketManager) {

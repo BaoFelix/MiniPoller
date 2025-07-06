@@ -7,19 +7,28 @@ class PollCreationForm {
 
   render(container) {
     this.formElement.innerHTML = `
-      <h1>Create a New Poll</h1>
+      <div class="poll-creation-header">
+        <h1>📊 Create a New Poll</h1>
+        <p class="subtitle">Create engaging polls and collect responses in real-time</p>
+      </div>
+      
       <div class="form-group" id="question-container">
-        <label>Poll Question</label>
+        <label>📝 Poll Question</label>
         <div class="question-input">
-          <textarea id="poll-question" name="taskDescription" placeholder="Poll Question" required></textarea>
+          <textarea id="poll-question" name="taskDescription" placeholder="What would you like to ask?" required></textarea>
         </div>
       </div>
-      <!-- Poll Options -->
-      <div class="form-group" id="options-container">
-        <label>Poll Options</label>
+      
+      <div class="form-group">
+        <label>⚡ Poll Options</label>
+        <p class="options-help">Add at least 2 options for your poll</p>
+        <div id="options-container"></div>
       </div>
-      <button type="button" id="add-option-btn">Add Option</button>
-      <button type="submit" id="create-poll-btn">Create Poll</button>
+      
+      <div class="form-actions">
+        <button type="button" id="add-option-btn">➕ Add Option</button>
+        <button type="submit" id="create-poll-btn">🚀 Create Poll</button>
+      </div>
     `;
 
     // Initialize options container
@@ -59,14 +68,21 @@ class PollCreationForm {
     const removeOptionBtn = document.createElement('button');
     removeOptionBtn.type = 'button';
     removeOptionBtn.classList.add('remove-option-btn');
-    removeOptionBtn.textContent = '✖';
+    removeOptionBtn.innerHTML = '🗑️';
+    removeOptionBtn.title = 'Remove this option';
     removeOptionBtn.addEventListener('click', () => {
-      optionDiv.remove();
-      this.updateOptionPlaceholders();
+      if (this.optionsContainer.querySelectorAll('.option-input').length > 2) {
+        optionDiv.remove();
+        this.updateOptionPlaceholders();
+      } else {
+        alert('You need at least 2 options for a poll.');
+      }
     });
 
     optionDiv.appendChild(optionInput);
     optionDiv.appendChild(removeOptionBtn);
+    
+    // Append the new option to the options container
     this.optionsContainer.appendChild(optionDiv);
   }
 

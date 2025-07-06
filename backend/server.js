@@ -12,72 +12,8 @@ const SessionManager = require("./models/sessionManager");
 const WebSocketServer = require("./services/webSocketServer");
 const apiRoutes = require("./routes/apiRoutes");
 const getLocalIPAddress = require("./utils/utilities").getLocalIPAddress;
-const { spawn } = require("child_process");
 
-// Hold reference to the capture helper so we can manage its lifecycle
-let captureProcess;
-let shuttingDown = false;
-
-/**
- * Start the Windows capture helper if available. The spawned process is stored
- * globally so it can be restarted or terminated when the server exits.
- */
-function startCaptureProcess() {
-  const helperScript = path.join(__dirname, "../windows_capture/captureHelper.js");
-  if (!fs.existsSync(helperScript)) {
-    console.log(`Capture script not found at ${helperScript}`);
-    return;
-  }
-
-  // Try to find electron executable
-  const electronPath = path.join(__dirname, "node_modules", ".bin", "electron.cmd");
-  const electronPathAlt = path.join(__dirname, "..", "windows_capture", "node_modules", ".bin", "electron.cmd");
-  
-  let electronExec = electronPath;
-  if (!fs.existsSync(electronPath) && fs.existsSync(electronPathAlt)) {
-    electronExec = electronPathAlt;
-  }
-  
-  if (!fs.existsSync(electronExec)) {
-    console.log(`Electron not found at ${electronPath} or ${electronPathAlt}`);
-    return;
-  }
-
-  captureProcess = spawn(electronExec, [helperScript], { detached: true });
-  if (captureProcess.pid) {
-    captureProcess.unref();
-  }
-  console.log(`Started text capture module`);
-
-  captureProcess.stdout.on("data", (data) => {
-    console.log(`[capture] ${data.toString().trim()}`);
-  });
-
-  captureProcess.stderr.on("data", (data) => {
-    console.error(`[capture] ${data.toString().trim()}`);
-  });
-
-  // Restart the helper if it exits or errors
-  captureProcess.on("exit", (code, signal) => {
-    if (!shuttingDown) {
-      console.log(
-        `Capture helper exited with code ${code} (${signal}); restarting...`
-      );
-      startCaptureProcess();
-    }
-  });
-
-  captureProcess.on("error", (err) => {
-    if (!shuttingDown) {
-      console.error(`Capture helper error: ${err}`);
-      startCaptureProcess();
-    }
-  });
-}
-
-
-
-// Initialize an Express app to handle routing,  middleware and requests.
+// Initialize an Express app to handle routing, middleware and requests.
 const app = express();
 
 // Set the port number for the server to listen on
@@ -86,32 +22,23 @@ const port = process.env.PORT || 3000;
 const host = process.env.HOST || "0.0.0.0";
 const localIP = getLocalIPAddress();
 
-// Launch the Windows text capture helper on Windows platforms
-if (process.platform === "win32") {
-  startCaptureProcess();
 
-  const terminateHelper = () => {
-    if (captureProcess) {
-      shuttingDown = true;
-      captureProcess.kill();
-    }
-  };
-
-  process.on("exit", terminateHelper);
-  ["SIGINT", "SIGTERM"].forEach((sig) =>
-    process.on(sig, () => {
-      terminateHelper();
-      process.exit();
-    })
-  );
-}
-
-
-// Middleware to parse JSON data in requests
-app.use(express.json());
+// Middleware to parse JSON data in requests with UTF-8 support
+app.use(express.json({ limit: '10mb' }));
+app.use(express.urlencoded({ extended: true, limit: '10mb' }));
 // Middleware to provide access to the public directory(provide all static files in the public directory, such as images, CSS, and JavaScript files)
 // Also set "../frontend" as the root directory for URL requests
-app.use(express.static(path.join(__dirname, "../frontend"),{ maxAge: "7d" }));
+app.use(express.static(path.join(__dirname, "../frontend"), { 
+  maxAge: 0, // Disable caching for development
+  etag: false,
+  lastModified: false,
+  setHeaders: (res, path) => {
+    // Set aggressive no-cache headers for all static files
+    res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
+    res.setHeader('Pragma', 'no-cache');
+    res.setHeader('Expires', '0');
+  }
+}));
 
 const sessionManager = new SessionManager();
 const webSocketServer = new WebSocketServer(sessionManager);
@@ -150,6 +77,5 @@ webSocketServer.initialize(server);
 // Start the server
 server.listen(port, host, () => {
   console.log(`Server is running at http://${localIP}:${port}/`);
-
   global.serverURL = `http://${localIP}:${port}/`;
 });
