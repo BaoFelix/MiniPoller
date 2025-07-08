@@ -243,10 +243,27 @@ form {
   color: #fff;
 }
 
+/* Poll creation form中的创建投票按钮特殊样式 */
+#app:has(.poll-creation-header) #create-poll-btn {
+  background-color: #ffc107;
+  color: #212529;
+  border: 3px solid #ffc107;
+  box-shadow: 0 4px 12px rgba(255, 193, 7, 0.4);
+  font-weight: 700;
+}
+
 #create-poll-btn:hover {
   background-color: #0069d9;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+/* Poll creation form中的创建投票按钮hover状态 */
+#app:has(.poll-creation-header) #create-poll-btn:hover {
+  background-color: #ffcd39;
+  color: #212529;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 193, 7, 0.5);
 }
 
 /* 保留原有的按钮样式，供其他按钮使用 */

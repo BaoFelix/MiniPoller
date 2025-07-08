@@ -67,7 +67,7 @@ uIOhook.on('keydown', (e) => {
               type: 'text-selected',
               text: lastText,
               method: 'ctrl-c',
-              position: { x: currentMousePos.x + 5, y: currentMousePos.y + 5 } // Very close to mouse position
+              position: { x: currentMousePos.x, y: currentMousePos.y } // 直接使用鼠标位置
             });
           } else {
             console.log('Same text within 1 second, ignoring...');
@@ -142,7 +142,7 @@ uIOhook.on('mouseup', (e) => {
               type: 'text-selected',
               text: lastText,
               method: 'mouse-drag',
-              position: { x: e.x + 5, y: e.y + 5 } // Very close to mouse release position
+              position: { x: e.x, y: e.y } // 直接使用鼠标释放位置
             });
           } else {
             console.log('Same text within 1 second, ignoring...');
