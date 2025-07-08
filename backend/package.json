@@ -1,18 +1,30 @@
 {
-  "name": "backend",
+  "name": "mini-poller",
   "version": "1.0.0",
-  "main": "server.js",
-  "bin": "server.js",
+  "main": "electronMain.js",
+  "description": "MiniPoller - Quick polling application with global text capture",
   "scripts": {
+    "start": "npx electron electronMain.js",
+    "dev": "npx electron electronMain.js --dev",
+    "server": "node server.js",
     "test": "jest",
-    "start": "npx electron electronMain.js"
+    "install-deps": "npm install",
+    "clean": "rmdir /s /q node_modules 2>nul & del package-lock.json 2>nul",
+    "reinstall": "npm run clean && npm install",
+    "postinstall": "echo Dependencies installed successfully"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
+  "keywords": [
+    "polling",
+    "survey",
+    "electron",
+    "real-time",
+    "voting"
+  ],
+  "author": "MiniPoller Team",
+  "license": "MIT",
   "engines": {
-    "node": ">=14"
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
   },
   "dependencies": {
     "clipboardy": "^3.0.0",

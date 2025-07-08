@@ -1,87 +1,136 @@
-# MiniPoller
+# 📊 MiniPoller
 
-Lightweight, web-based polling application that allows team members to cast votes simultaneously.
+Fast polling application with global text capture, real-time voting, and chart visualization.
 
-## Table of Contents
+## 🚀 Quick Start (from GitHub)
 
-- [Introduction](#introduction)
-- [Features](#features)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Contributing](#contributing)
-- [License](#license)
+### Prerequisites
+- Windows 10/11
+- Node.js 14.0+ ([Download](https://nodejs.org/))
 
-## Introduction
-
-MiniPoller is a lightweight, web-based polling application designed to facilitate quick and easy decision-making within teams. Users can create polls, cast votes, and view results in real-time.
-
-## Features
-
-- Create and manage polls
-- Real-time voting and results
-- User-friendly interface
-
-## Installation
-
-To set up the project locally, follow these steps:
-
-1. **Clone the repository:**
-    ```bash
-    git clone https://github.com/BaoFelix/MiniPoller.git
-    cd MiniPoller
-    ```
-
-2. **Ensure Node.js 18 or higher is installed** (use [nvm](https://github.com/nvm-sh/nvm) if needed):
-    ```bash
-    nvm install 18
-    nvm use 18
-    ```
-
-3. **Navigate to the backend directory and install dependencies:**
-    ```bash
-    cd backend
-    npm install
-    ```
-
-4. **Create your environment file:**
-    ```bash
-    cp .env.example .env
-    ```
-
-5. **Start the backend server:**
-    ```bash
-    npm start
-    ```
-
-6. **Open the frontend in a browser:**
-    Navigate to `http://localhost:3000/` after starting the backend.
-
-## Usage
-
-1. **Creating a Poll:**
-    - Open the application in your web browser.
-    - Fill in the poll question and options.
-    - Click on "Create Poll" to generate a poll link.
-
-2. **Voting:**
-    - Share the poll link with team members.
-    - Team members can cast their votes using the link.
-
-3. **Viewing Results:**
-    - Results are updated in real-time as votes are cast.
-
-## Configuration
-
-### .env Configuration
-
-To set up the environment variables, copy the example file and then edit it as needed:
+### Method 1: One-Click Installation (Recommended)
 
 ```bash
+# 1. Clone or download the project
+git clone https://github.com/your-username/MiniPoller.git
+cd MiniPoller
+
+# 2. Run the one-click installation script
+# Windows: Double-click install.bat
+# Or in command line:
+install.bat
+```
+
+### Method 2: Manual Installation
+
+```bash
+# 1. Clone the project
+git clone https://github.com/your-username/MiniPoller.git
+cd MiniPoller
+
+# 2. Navigate to backend directory
+cd backend
+
+# 3. Install dependencies
+npm install
+
+# 4. Start the application
+npm start
+```
+
+## 🎯 Features
+
+### 🖱️ Global Text Capture
+- **Ctrl+C Capture**: Automatically shows poll creation option when copying text
+- **Mouse Drag Selection**: Automatically detects text selection and shows options
+- **Smart Positioning**: Popup appears near cursor position
+
+### 📊 Polling Features
+- **Quick Poll Creation**: Support for creating polls with multiple options
+- **Real-time Results**: Beautiful chart display of voting results
+- **One-Click Sharing**: Generate poll links for easy sharing
+
+### 💻 Interface Features
+- **Modern UI**: Clean and beautiful user interface
+- **Responsive Design**: Adapts to different screen sizes
+- **No Menu Bar**: Desktop version with minimalist design
+- **Chart Export**: Save poll results as images
+
+## 🔧 Troubleshooting
+
+### Common Issues
+
+**Dependency installation failed?**
+```bash
+# Clean and reinstall
+cd backend
+npm run clean
+npm install
+
+# Or use Chinese mirror
+npm config set registry https://registry.npmmirror.com/
+npm install
+```
+
+**Cannot start Electron?**
+```bash
+# Reinstall Electron
+npm uninstall electron
+npm install electron
+```
+
+**Port already in use?**
+```bash
+# Find the process using the port
+netstat -ano | findstr :3000
+# Kill the process (replace PID)
+taskkill /PID <PID> /F
+```
+
+## 📁 Available Scripts
+
+In project root directory:
+- `install.bat` - One-click install all dependencies
+- `run.bat` - Quick start the application
+- `check.bat` - Check environment and dependency status
+
+In backend directory:
+- `npm start` - Start the application
+- `npm run dev` - Start in development mode
+- `npm run clean` - Clean installation files
+- `npm run reinstall` - Clean and reinstall
+
+## 📖 Usage Guide
+
+### Creating a Poll
+1. Open the application in your web browser at `http://localhost:3000`
+2. Fill in the poll question and options
+3. Click "Create Poll" to generate a poll link
+4. Share the link with participants
+
+### Voting
+1. Open the poll link in any web browser
+2. Select your preferred option
+3. Click "Vote" to submit your choice
+4. View real-time results with beautiful charts
+
+### Text Capture (Windows Only)
+1. **Start the application**: The text capture feature runs automatically when you start the app
+2. **Select text anywhere**: Use mouse drag selection or Ctrl+C to copy text on your screen  
+3. **Automatic detection**: A small "Create Poll" overlay appears near your cursor when text is selected
+4. **Quick poll creation**: Click the overlay to open the poll creation dialog with pre-filled text
+
+## ⚙️ Configuration
+
+### Environment Variables
+Create a `.env` file in the backend directory:
+
+```bash
+# Copy the example file
 cp backend/.env.example backend/.env
 ```
 
-The default template includes:
-
+Default configuration:
 ```plaintext
 PORT=3000
 HOST=0.0.0.0
@@ -90,74 +139,68 @@ SSL_KEY_PATH=path/to/your/server.key
 SSL_CERT_PATH=path/to/your/server.cert
 ```
 
-- `PORT`: The port on which the server will run.
-- `HOST`: The host address for the server.
-- `HTTPS_ENABLED`: Set to `true` to enable HTTPS, otherwise `false`.
-- `SSL_KEY_PATH`: The file path to your SSL key.
-- `SSL_CERT_PATH`: The file path to your SSL certificate.
+### Network Access
+To access the app from other devices on your network:
+1. Set `HOST=0.0.0.0` in your `.env` file
+2. Find your local IP address: `ipconfig` (Windows)
+3. Access via `http://YOUR_IP:3000`
 
-### Using Public Network IP
+### HTTPS Setup (Optional)
+For secure connections:
+1. Obtain SSL certificates
+2. Set `HTTPS_ENABLED=true` in `.env`
+3. Specify certificate paths
+4. Restart the server
 
-To make the application accessible over the internet via a public IP address:
+## 🔧 Advanced Usage
 
-1. Ensure your server has a public IP address. If your server is behind a router or firewall, you may need to configure port forwarding.
-2. Set `HOST` to `0.0.0.0` in your `.env` file. This will allow the server to listen on all available network interfaces, making it accessible both locally and from external networks.
-
-Example .env configuration:
-
-```plaintext
-HOST=0.0.0.0
-PORT=3000
+### Development Mode
+```bash
+cd backend
+npm run dev
 ```
 
-Note: Avoid setting `HOST` directly to your public IP address; setting `0.0.0.0` is sufficient for accepting requests on all interfaces, including your public IP.
-
-### Setting Up SSL for HTTPS
-
-To enable HTTPS for secure communication:
-
-1. Obtain an SSL certificate: You can get a certificate from a trusted Certificate Authority (CA), or generate a self-signed certificate for testing purposes.
-2. Configure the `.env` file: Set `HTTPS_ENABLED` to `true`, and specify the paths to your SSL key and certificate files.
-
-Example .env configuration:
-
-```plaintext
-HTTPS_ENABLED=true
-SSL_KEY_PATH=path/to/your/server.key
-SSL_CERT_PATH=path/to/your/server.cert
+### Clean Installation
+```bash
+cd backend
+npm run clean
+npm run reinstall
 ```
 
-Restart the server after updating the `.env` file for changes to take effect.
+### Environment Check
+```bash
+# Run from project root
+check.bat
+```
 
-Note: For production, use a certificate from a trusted CA to avoid browser security warnings.
+## 🐛 Common Issues
 
-## Text Capture Integration (Windows)
+**Application won't start?**
+- Check if port 3000 is available
+- Verify Node.js version (14.0+)
+- Run `check.bat` to diagnose issues
 
-MiniPoller now ships with a lightweight JavaScript helper that handles text
-selection and polling UI on Windows. The script is located at
-`windows_capture/captureHelper.js` and is launched automatically when the
-backend starts on Windows platforms.
+**Dependencies not installing?**
+- Clear npm cache: `npm cache clean --force`
+- Try different registry: `npm config set registry https://registry.npmjs.org/`
+- Run `install.bat` again
 
-The helper is an Electron process that listens for drag selection events,
-captures the highlighted text and displays a small "Create Poll" overlay near
-your cursor. Clicking the overlay opens a compact poll creation window with the
-captured text pre‑filled.
+**Electron not working?**
+- Reinstall: `npm uninstall electron && npm install electron`
+- Check Windows compatibility
 
-### Using
+## 🤝 Contributing
 
-1. Install backend dependencies (`npm install` inside the `backend` folder`).
-2. Start the server with `npm start`. On Windows the helper launches
-   automatically.
-3. Select text anywhere on screen. When you release the mouse a small overlay
-   appears offering to create a poll.
-4. Clicking the overlay opens the poll dialog. Closing the server stops the
-   helper process automatically.
+Contributions are welcome! Please:
+1. Fork the repository
+2. Create a feature branch
+3. Make your changes
+4. Submit a pull request
 
-## Contributing
-Contributions are welcome! Please open an issue or submit a pull request for any improvements or bug fixes.
+## 📄 License
 
-## License
-This project is licensed under the MIT License and Open Font License.
+This project is licensed under the MIT License.
 
 ---
-Feel free to review this draft and suggest any changes or additional sections you'd like to include.
+
+**Need help?** Check the troubleshooting section or open an issue on GitHub.
