@@ -24,17 +24,37 @@ class WebSocketServer {
   onConnection(socket) {
     const pollId = socket.handshake.query.pollId;
     if (pollId) {
-      // Add the client to the room for the poll, so that it can spread messages to all clients connected to this room
-      socket.join(pollId);
-      console.log(`Client connected to poll ${pollId}`);
+      console.log(`🔌 Client trying to connect to poll: ${pollId}`);
+      
+      // Check if poll exists before joining
+      if (!this.sessionManager.pollExists(pollId)) {
+        console.error(`❌ Poll ${pollId} not found. Disconnecting client.`);
+        socket.emit('error', { 
+          message: 'Poll not found', 
+          code: 'POLL_NOT_FOUND',
+          pollId: pollId 
+        });
+        socket.disconnect();
+        return;
+      }
 
-      const poll = this.sessionManager.getPoll(pollId);
-      if(poll)
-      {
+      // Add the client to the room for the poll
+      socket.join(pollId);
+      console.log(`✅ Client connected to poll ${pollId}`);
+
+      try {
+        const poll = this.sessionManager.getPoll(pollId);
         const results = poll.getResults();
 
         // Send the current poll results to all clients in the room
         this.io.to(pollId).emit('voteUpdate', results);
+      } catch (error) {
+        console.error(`❌ Error getting poll results for ${pollId}:`, error.message);
+        socket.emit('error', { 
+          message: 'Error loading poll data', 
+          code: 'POLL_DATA_ERROR',
+          pollId: pollId 
+        });
       }
 
       // Listen for vote events from the client

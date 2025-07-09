@@ -21,6 +21,18 @@ class SocketManager {
     this.socket.on("disconnect", () => {
       console.log("WebSocket disconnected");
     });
+
+    // Handle errors from server
+    this.socket.on("error", (error) => {
+      console.error("Socket error:", error);
+      if (error.code === 'POLL_NOT_FOUND') {
+        alert(`Poll not found: ${error.pollId}\nThis poll may have expired or been deleted.`);
+        // Optionally redirect to home page
+        window.location.href = '/';
+      } else if (error.code === 'POLL_DATA_ERROR') {
+        alert(`Error loading poll data: ${error.message}`);
+      }
+    });
   }
 
   emit(event, data) {
