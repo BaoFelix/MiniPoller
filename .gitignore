@@ -1,16 +1,13 @@
 # Node.js dependencies
 node_modules/
+package-lock.json
 
 # Editor directories and files
 .vscode/
 
-<<<<<<< codex/add-.env-to-.gitignore-and-update-readme
-# Executables
-voting-app.exe
+# Executable binaries
+*.exe
 
 # Environment files
 .env
-=======
-# Executable binaries
-*.exe
->>>>>>> main
+
