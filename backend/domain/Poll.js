@@ -30,7 +30,7 @@ class Poll {
 
   getResults() {
     const voteCountsObj = {};
-    this.voteCounts.forEach((count,option) => {
+    this.voteCounts.forEach((count, option) => {
       voteCountsObj[option] = count;
     });
 
