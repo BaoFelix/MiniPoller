@@ -7,9 +7,12 @@ const fs = require("fs");
 const path = require("path");
 const helmet = require("helmet");
 const cors = require("cors");
-const APIController = require("./controllers/apiController");
-const SessionManager = require("./models/sessionManager");
-const WebSocketServer = require("./services/webSocketServer");
+const socketIO = require('socket.io');
+const InMemoryRepository = require("./infrastructure/InMemoryRepository");
+const SessionService = require("./application/SessionService");
+const WebSocketObserver = require("./infrastructure/WebSocketObserver");
+const SocketHandler = require("./presentation/SocketHandler");
+const APIController = require("./presentation/APIController");
 const apiRoutes = require("./routes/apiRoutes");
 const getLocalIPAddress = require("./utils/utilities").getLocalIPAddress;
 
@@ -40,21 +43,13 @@ app.use(express.static(path.join(__dirname, "../frontend"), {
   }
 }));
 
-const sessionManager = new SessionManager();
-const webSocketServer = new WebSocketServer(sessionManager);
-const apiController = new APIController(sessionManager, webSocketServer);
+// ① Infrastructure: Repository (no dependencies)
+const repository = new InMemoryRepository();
 
-app.use("/api", apiRoutes(apiController));
+// ② Application: SessionService (depends on Repository)
+const sessionService = new SessionService(repository);
 
-//Handle all other requests by serving the index.html file
-app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "../frontend/index.html"));
-});
-
-
-
-
-// Enable HTTPS if certificates are provided
+// ③ Enable HTTPS if certificates are provided
 let server;
 if (process.env.HTTPS_ENABLED === "true") {
   const httpsOptions = {
@@ -68,8 +63,25 @@ if (process.env.HTTPS_ENABLED === "true") {
   console.log(`Using HTTP`);
 }
 
-// Start the WebSocket server by sharing the HTTP server instance, so that it can listen for WebSocket connections
-webSocketServer.initialize(server);
+// ④ Socket.IO (depends on HTTP server)
+const io = socketIO(server);
+
+// ⑤ Infrastructure: WebSocketObserver (depends on io)
+const wsObserver = new WebSocketObserver(io);
+sessionService.addObserver(wsObserver);
+
+// ⑥ Presentation: SocketHandler (depends on io + sessionService)
+const socketHandler = new SocketHandler(io, sessionService);
+socketHandler.initialize();
+
+// ⑦ Presentation: APIController (depends on sessionService only)
+const apiController = new APIController(sessionService);
+app.use("/api", apiRoutes(apiController));
+
+//Handle all other requests by serving the index.html file
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "../frontend/index.html"));
+});
 
 
 

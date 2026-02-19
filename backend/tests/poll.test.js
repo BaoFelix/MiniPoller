@@ -1,4 +1,4 @@
-const Poll = require('../models/poll');
+const Poll = require('../domain/Poll');
 
 describe('Poll voting', () => {
   let poll;
