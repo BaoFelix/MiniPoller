@@ -1,21 +1,20 @@
 const generateUniqueId = require("../utils/utilities").generateUniqueId;
 
 class APIController{
-    constructor(sessionManager, webSocketServer){
-        this.sessionManager = sessionManager;
-        this.webSocketServer = webSocketServer;
+    constructor(sessionService){
+        this.sessionService = sessionService;
     }
 
     createPoll = (req, res)=>{
         try{
             const pollData = req.body;
-            const poll = this.sessionManager.createPoll(pollData);
+            const poll = this.sessionService.createSession(pollData);
             const pollId = poll.pollId;
 
             // Generate a unique token for the poll owner
             const ownerToken = generateUniqueId();
 
-            this.sessionManager.setOwnerToken(pollId, ownerToken);
+            this.sessionService.setOwnerToken(pollId, ownerToken);
 
             const pollUrl = `${req.protocol}://${req.get('host')}/poll/${pollId}?ownerToken=${ownerToken}`;
             
@@ -35,7 +34,7 @@ class APIController{
     getPoll = (req, res)=>{
         try{
             const pollId = req.params.pollId;
-            const poll = this.sessionManager.getPoll(pollId);
+            const poll = this.sessionService.getSession(pollId);
 
             if(!poll){
                 res.status(404).json({error: `Poll with ID ${pollId} not found`});
@@ -55,12 +54,11 @@ class APIController{
             const pollId = req.params.pollId;
             const { ownerToken } = req.body;
 
-            if(!this.sessionManager.verifyOwnerToken(pollId, ownerToken)){
+            if(!this.sessionService.verifyOwnerToken(pollId, ownerToken)){
                 return res.status(403).json({error: 'Invalid owner token'});
             }
             
-            this.sessionManager.endPoll(pollId);
-            this.webSocketServer.notifyPollEnd(pollId);
+            this.sessionService.endSession(pollId);
 
             res.status(200).json({ message: 'Poll ended successfully' });
         }

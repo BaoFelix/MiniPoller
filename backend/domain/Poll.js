@@ -1,7 +1,8 @@
 const generateUniqueId = require("../utils/utilities").generateUniqueId;
+const PollRuleFactory = require('./rules/PollRuleFactory');
 
 class Poll {
-  constructor(pollData) {
+  constructor(pollData, rule = null) {
     if (!pollData || !pollData.taskDescription || !pollData.options || !Array.isArray(pollData.options) || pollData.options.length === 0) {
       throw new Error("Invalid poll data. Ensure taskDescription and options are provided.");
     }
@@ -11,8 +12,10 @@ class Poll {
     this.taskDescription = pollData.taskDescription;
     this.options = pollData.options;
     this.displayStyle = pollData.displayStyle;
+    this.ruleType = pollData.ruleType || 'single';
     this.voteCounts = new Map();
     this.votes = new Map();
+    this.rule = rule || PollRuleFactory.create(this.ruleType);
 
     this.options.forEach((option) => {
       this.voteCounts.set(option, 0);
@@ -20,23 +23,14 @@ class Poll {
   }
 
   addVote(option, userId) {
-    if (!this.isActive) {
-      throw new Error("Poll has ended");
-    }
-    if (!this.options.includes(option)) {
-      throw new Error("Invalid voting option");
-    }
-    if (this.votes.has(userId)) {
-      throw new Error("User has already voted");
-    }
-
-    this.votes.set(userId, option);
-    this.voteCounts.set(option, this.voteCounts.get(option) + 1);
+    const voteData = { option };
+    this.rule.validate(this, userId, voteData);
+    this.rule.apply(this, userId, voteData);
   }
 
   getResults() {
     const voteCountsObj = {};
-    this.voteCounts.forEach((count,option) => {
+    this.voteCounts.forEach((count, option) => {
       voteCountsObj[option] = count;
     });
 
@@ -68,6 +62,7 @@ class Poll {
       options: this.options,
       displayStyle: this.displayStyle,
       isActive: this.isActive,
+      ruleType: this.ruleType,
     };
   }
 }
