@@ -8,6 +8,7 @@ const path = require("path");
 const helmet = require("helmet");
 const cors = require("cors");
 const socketIO = require('socket.io');
+const { apiLimiter, staticFileLimiter } = require('./middleware/rateLimiter');
 const InMemoryRepository = require("./infrastructure/InMemoryRepository");
 const SessionService = require("./application/SessionService");
 const WebSocketObserver = require("./infrastructure/WebSocketObserver");
@@ -76,10 +77,11 @@ socketHandler.initialize();
 
 // ⑦ Presentation: APIController (depends on sessionService only)
 const apiController = new APIController(sessionService);
-app.use("/api", apiRoutes(apiController));
+// Apply rate limiting to all API routes to prevent abuse
+app.use("/api", apiLimiter, apiRoutes(apiController));
 
-//Handle all other requests by serving the index.html file
-app.get("*", (req, res) => {
+// Apply rate limiting to catch-all route to prevent DoS attacks on static file serving
+app.get("*", staticFileLimiter, (req, res) => {
   res.sendFile(path.join(__dirname, "../frontend/index.html"));
 });
 
