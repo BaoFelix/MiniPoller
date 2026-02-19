@@ -43,7 +43,6 @@ class SessionService {
         const poll = new Poll(pollData, rule);
         this.repository.save(poll);
         console.log('✅ Poll created:', poll.pollId);
-        console.log('📊 Total active polls:', this.repository.polls ? this.repository.polls.size : 'N/A');
         return poll;
     }
 
